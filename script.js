@@ -37,11 +37,11 @@ const locations = Object.keys(roadGraph);
 
 function move(state, destination) {
     if (!roadGraph[state.place].includes(destination)) {
-        return state; 
+        return state;
     } else {
         let parcels = state.parcels.map(p => {
-            if (p.place !== state.place) return p; 
-            return { place: destination, address: p.address }; 
+            if (p.place !== state.place) return p;
+            return { place: destination, address: p.address };
         }).filter(p => p.place !== p.address);
         return { place: destination, parcels };
     }
@@ -69,9 +69,23 @@ function randomPick(array) {
     return array[choice];
 }
 
+function randomParcels(count) {
+    let parcels = [];
+    for (let i = 0; i < count; i++) {
+        let place = randomPick(locations);
+        let address;
+        do {
+            address = randomPick(locations);
+        } while (address === place);
+        parcels.push({ place, address });
+    }
+    return parcels;
+}
+
+
 let initialState = {
     place: "Post Office",
-    parcels: [{ place: "Post Office", address: "Alice's House" }]
+    parcels: randomParcels(5) // [{ place: "Post Office", address: "Alice's House" }]
 };
 
 runRobot(initialState, randomRobot);
